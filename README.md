@@ -45,7 +45,7 @@ $currencyCode = 'USD'; // The currency code to convert from
 $outputFormat = 'json'; // The desired output format (json or csv)
 
 $convertedResult = $converter->convertCurrency($dataURL, $amount, $currencyCode, $outputFormat);
-
+```
 Data Source
 The application requires a data source for currency exchange rate data. Currently, it supports data in JSON format. The data source should provide exchange rates for various currencies.
 
