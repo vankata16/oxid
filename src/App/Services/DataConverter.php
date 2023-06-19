@@ -11,12 +11,11 @@ class DataConverter implements DataConverterInterface
 
     public function convertToCSV(array $data): string
     {
-        $csv = '';
-
-        foreach ($data as $row) {
-            $csv .= implode(',', $row) . "\n";
+        $convertedData = [];
+        foreach ($data as $currencyCode => $money) {
+            $convertedData[$currencyCode] = $money->getAmount()->toFloat();
         }
-
-        return $csv;
+        return implode(',', $convertedData);
     }
+
 }

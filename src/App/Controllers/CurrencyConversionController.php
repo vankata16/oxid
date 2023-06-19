@@ -6,6 +6,7 @@ use App\Controllers\CurrencyConverterInterface;
 use Brick\Money\Money;
 use Brick\Money\Currency;
 use Brick\Math\RoundingMode;
+use Brick\Money\Context\CustomContext;
 use App\Services\CurrencyDataService;
 use App\Services\DataConverter;
 
@@ -18,8 +19,13 @@ class CurrencyConversionController implements CurrencyConverterInterface
         CurrencyDataService $dataService,
         DataConverter $dataConverter
     ) {
-        $this->dataService = $dataService;
+        $this->setDataService($dataService);
         $this->dataConverter = $dataConverter;
+    }
+
+    public function setDataService(CurrencyDataService $dataService)
+    {
+        $this->dataService = $dataService;
     }
 
     /**
@@ -48,7 +54,7 @@ class CurrencyConversionController implements CurrencyConverterInterface
         // Perform currency conversion for each currency
         foreach ($data['exchangeRates'] as $currencyCode => $rate) {
             // Convert the rate relative to the base rate and multiply by the amount
-            $convertedCurrencies[$currencyCode] = Money::of($rate, $currencyCode)
+            $convertedCurrencies[$currencyCode] = Money::of($rate, $currencyCode, new CustomContext(12, RoundingMode::HALF_UP), RoundingMode::HALF_UP)
                 ->dividedBy($baseRate, RoundingMode::HALF_DOWN)
                 ->multipliedBy($amount, RoundingMode::HALF_DOWN);
         }
